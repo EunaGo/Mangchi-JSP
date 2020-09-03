@@ -1,0 +1,939 @@
+
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
+<meta name="HandheldFriendly" content="true">
+<meta name="format-detection" content="telephone=no">
+<title>쉐어 글쓰기 | 쉐어포유</title>
+<link rel="stylesheet" href="https://shareforyou.co.kr/theme/basic/css/mobile.css?ver=171222">
+<link rel="stylesheet" href="https://shareforyou.co.kr/theme/basic/mobile/skin/outlogin/basic/style.css?ver=171222">
+<link rel="stylesheet" href="https://shareforyou.co.kr/theme/basic/mobile/skin/connect/basic/style.css?ver=171222">
+<link rel="stylesheet" href="https://shareforyou.co.kr/theme/basic/mobile/skin/board/gallery/style.css?ver=171222">
+<!--[if lte IE 8]>
+<script src="https://shareforyou.co.kr/js/html5.js"></script>
+<![endif]-->
+<script>
+// 자바스크립트에서 사용하는 전역변수 선언
+var g5_url       = "https://shareforyou.co.kr";
+var g5_bbs_url   = "https://shareforyou.co.kr/bbs";
+var g5_is_member = "1";
+var g5_is_admin  = "";
+var g5_is_mobile = "1";
+var g5_bo_table  = "share";
+var g5_sca       = "";
+var g5_editor    = "";
+var g5_cookie_domain = ".shareforyou.co.kr";
+</script>
+<script src="https://shareforyou.co.kr/js/jquery-1.8.3.min.js"></script>
+<script src="https://shareforyou.co.kr/js/jquery.menu.js?ver=171222"></script>
+<script src="https://shareforyou.co.kr/js/common.js?ver=171222"></script>
+<script src="https://shareforyou.co.kr/js/wrest.js?ver=171222"></script>
+<script src="https://shareforyou.co.kr/js/placeholders.min.js"></script>
+<link rel="stylesheet" href="https://shareforyou.co.kr/js/font-awesome/css/font-awesome.min.css">
+<script src="https://shareforyou.co.kr/js/modernizr.custom.70111.js"></script>
+</head>
+<body>
+<div id="hd_login_msg">꼬스챠님 로그인 중 <a href="https://shareforyou.co.kr/bbs/logout.php">로그아웃</a></div><script src="https://shareforyou.co.kr/js/jquery-1.8.3.min.js"></script>
+<script src="https://shareforyou.co.kr/js/jquery.modal.js"></script>
+<link rel="stylesheet" href="https://shareforyou.co.kr/js/css/jquery.modal.css">
+
+<header id="hd">
+    <h1 id="hd_h1">쉐어 글쓰기</h1>
+
+    <div class="to_content"><a href="#container">본문 바로가기</a></div>
+
+    
+    <div id="hd_wrapper">
+        <div id="logo">
+            <a onclick="exit_session()"><img src="https://shareforyou.co.kr/theme/basic/img/logo.png" alt="쉐어포유"></a>
+        </div>
+
+        <button type="button" id="gnb_open" class="hd_opener">
+			<i class="fa fa-bars" aria-hidden="true"></i><span class="sound_only"> 메뉴열기</span>
+		</button>
+        <div id="gnb" class="hd_div">
+			<div class="hd_gnb_div">
+				<div class="gnb_user">
+					<button type="button" id="gnb_close" class="hd_closer"><span class="sound_only">메뉴 </span>닫기</button>
+					<div class="login_ment">
+						<h2>
+							<img src="https://shareforyou.co.kr/theme/basic/img/logo.png" alt="Share For you">
+							<p>
+								당신의 일상 속, 작은 행복을 위한 서비스
+							</p>
+						</h2>
+					</div>
+										<div class="user_info">
+												<div class="user">
+															<img src="/data/member_image/ka/kakao_85e807e8.gif">
+														<p><span class="user_name">꼬스챠</span>님, 반갑습니다.</p>
+						</div>
+						<div class="btn_wr">
+							<a class="btn_editinfo" href="https://shareforyou.co.kr/bbs/mypage.php">마이페이지</a>
+							<a class="btn_logout" href="https://shareforyou.co.kr/bbs/logout.php">로그아웃</a>
+						</div>
+					</div>
+									</div>
+
+				<div id="hd_sch">
+					<h2>사이트 내 전체검색</h2>
+				<form name="fsearchbox" action="https://shareforyou.co.kr/bbs/search.php" onsubmit="return fsearchbox_submit(this);" method="get">
+					<input type="hidden" name="sfl" value="wr_subject||wr_content">
+					<input type="hidden" name="sop" value="and">
+					<input type="text" name="stx" id="sch_stx" placeholder="검색어(필수)" required maxlength="20">
+					<button type="submit" value="검색" id="sch_submit"><i class="fa fa-search" aria-hidden="true"></i><span class="sound_only">검색</span></button>
+				</form>
+
+					<script>
+					function exit_session(){
+						set_cookie("exit", "1", 86400 * 1);
+						location.href=g5_url;
+					}
+					function fsearchbox_submit(f)
+					{
+						if (f.stx.value.length < 2) {
+							alert("검색어는 두글자 이상 입력하십시오.");
+							f.stx.select();
+							f.stx.focus();
+							return false;
+						}
+
+						var cnt = 0;
+						for (var i=0; i<f.stx.value.length; i++) {
+							if (f.stx.value.charAt(i) == ' ')
+								cnt++;
+						}
+
+						if (cnt > 1) {
+							alert("빠른 검색을 위하여 검색어에 공백은 한개만 입력할 수 있습니다.");
+							f.stx.select();
+							f.stx.focus();
+							return false;
+						}
+
+						return true;
+					}
+					</script>
+				</div>
+
+
+				<ul id="gnb_1dul">
+					
+					<li class="gnb_1dli">
+						<a href="https://shareforyou.co.kr/bbs/board.php?bo_table=notice" target="_self" class="gnb_1da">공지사항</a>
+											</li>
+					
+					<li class="gnb_1dli">
+						<a href="https://www.shareforyou.co.kr/bbs/board.php?bo_table=qa" target="_self" class="gnb_1da">Q & A</a>
+											</li>
+					
+					<li class="gnb_1dli">
+						<a href="https://www.shareforyou.co.kr/bbs/board.php?bo_table=free" target="_self" class="gnb_1da">자유게시판</a>
+											</li>
+					
+					<li class="gnb_1dli">
+						<a href="https://shareforyou.co.kr/bbs/board.php?bo_table=share" target="_self" class="gnb_1da">쉐어</a>
+						<button type="button" class="btn_gnb_op">하위분류</button><ul class="gnb_2dul">
+							<li class="gnb_2dli">
+								<a href="https://shareforyou.co.kr/bbs/board.php?bo_table=share&sca=캠핑용품" target="_self" class="gnb_2da">
+									<span><img src="https://shareforyou.co.kr/theme/basic/img/btn_one.svg" alt="똥그라미"></span>
+									<p>캠핑용품</p>
+								</a>
+							</li>
+													<li class="gnb_2dli">
+								<a href="https://shareforyou.co.kr/bbs/board.php?bo_table=share&sca=레저스포츠" target="_self" class="gnb_2da">
+									<span><img src="https://shareforyou.co.kr/theme/basic/img/btn_one.svg" alt="똥그라미"></span>
+									<p>레저 / 스포츠</p>
+								</a>
+							</li>
+													<li class="gnb_2dli">
+								<a href="https://shareforyou.co.kr/bbs/board.php?bo_table=share&sca=생활용품" target="_self" class="gnb_2da">
+									<span><img src="https://shareforyou.co.kr/theme/basic/img/btn_one.svg" alt="똥그라미"></span>
+									<p>생활용품</p>
+								</a>
+							</li>
+						</ul>
+					</li>
+									</ul>
+
+
+			</div>
+        </div>
+		
+		<!-- 메인 오른쪽 검색창 full -->
+		<script>
+			function search(){
+				if($('#search_div').css("display") == 'none'){
+					$('#search_div').css("display","block");
+				}else{
+					$('#search_div').css("display","none");
+				}
+			}
+		</script>
+		<button type="button" id="search_open" class="search_opener" onclick="search()">
+			<img src="https://shareforyou.co.kr/theme/basic/img/sch_open.png" alt="검색버튼"><span class="sound_only">검색창열기</span>
+		</button>
+
+		<div class="hd_search_full" id="search_div">
+			<button class="search_closer" onclick="search()">
+				<img src="https://shareforyou.co.kr/theme/basic/img/btn_x_fff.png" alt="닫기버튼"><span class="sound_only">검색창닫기</span>
+			</button>
+			<form name="fsearchbox" action="https://shareforyou.co.kr/bbs/search.php" onsubmit="return fsearchbox_submit(this);" method="get">
+				<input type="hidden" name="sfl" value="wr_subject||wr_content">
+				<input type="hidden" name="sop" value="and">
+				<input type="text" class="hd_sch_input " name="stx" id="sch_stx" placeholder="검색어를 입력해주세요">
+				<button class="hd_sch_sumit"><img src="https://shareforyou.co.kr/theme/basic/img/sch_fff.png" alt="검색버튼"></button>
+			</form>
+		</div>
+	
+		<button type="button" id="user_btn" class="hd_opener" style="display:none"><i class="fa fa-user" aria-hidden="true"></i><span class="sound_only">사용자메뉴</span></button>
+        <div class="hd_div" id="user_menu" style="display:none">
+            <button type="button" id="user_close" class="hd_closer"><span class="sound_only">메뉴 </span>닫기</button>
+
+            
+<!-- 로그인 후 외부로그인 시작 -->
+<aside id="ol_after" class="ol">
+   
+    <h2>나의 회원정보</h2>
+    <div id="ol_after_hd">
+        <span class="profile_img">
+            <img src="https://shareforyou.co.kr/data/member_image/ka/kakao_85e807e8.gif" alt="profile_image">            <a href="https://shareforyou.co.kr/bbs/member_confirm.php?url=register_form.php" id="ol_after_info" title="정보수정">정보수정</a>
+        </span>
+        <strong>꼬스챠님</strong>
+    </div>
+
+    <div id="ol_after_btn">
+                <a href="https://shareforyou.co.kr/bbs/logout.php" id="ol_after_logout">로그아웃</a>
+    </div>
+
+    <ul id="ol_after_private">
+        <li id="ol_after_memo">
+            <a href="https://shareforyou.co.kr/bbs/memo.php" target="_blank">
+                <span class="sound_only">안 읽은 쪽지</span>
+                <strong>0</strong>
+            </a>
+        </li>
+        <li id="ol_after_pt">
+            <a href="https://shareforyou.co.kr/bbs/point.php" target="_blank">
+                <span class="sound_only"> 포인트</span>
+                <strong>1,010</strong>
+            </a>
+        </li>
+        <li id="ol_after_scrap">
+            <a href="https://shareforyou.co.kr/bbs/scrap.php" target="_blank">스크랩</a>
+        </li>
+    </ul>
+
+</aside>
+
+<script>
+// 탈퇴의 경우 아래 코드를 연동하시면 됩니다.
+function member_leave()
+{
+    if (confirm("정말 회원에서 탈퇴 하시겠습니까?"))
+        location.href = "https://shareforyou.co.kr/bbs/member_confirm.php?url=member_leave.php";
+}
+</script>
+<!-- 로그인 후 외부로그인 끝 -->
+
+            <ul id="hd_nb">
+                <li class="hd_nb1"><a href="https://shareforyou.co.kr/bbs/qalist.php" id="snb_qa"><i class="fa fa-comments" aria-hidden="true"></i><br>1:1문의</a></li>
+                <li class="hd_nb2"><a href="https://shareforyou.co.kr/bbs/faq.php" id="snb_faq"><i class="fa fa-question-circle" aria-hidden="true"></i><br>FAQ</a></li>
+                <li class="hd_nb3"><a href="https://shareforyou.co.kr/bbs/current_connect.php" id="snb_cnt"><i class="fa fa-users" aria-hidden="true"></i><br>접속자 <span>2</span></a></li>
+                <li class="hd_nb4"><a href="https://shareforyou.co.kr/bbs/new.php" id="snb_new"><i class="fa fa-history" aria-hidden="true"></i><br>새글</a></li>
+            </ul>
+
+            <div id="text_size">
+            <!-- font_resize('엘리먼트id', '제거할 class', '추가할 class');-->
+                <button id="size_down" onclick="font_resize('container', 'ts_up ts_up2', '', this);" class="select"><img src="https://shareforyou.co.kr/img/ts01.png" width="20" alt="기본"></button>
+                <button id="size_def" onclick="font_resize('container', 'ts_up ts_up2', 'ts_up', this);"><img src="https://shareforyou.co.kr/img/ts02.png" width="20" alt="크게"></button>
+                <button id="size_up" onclick="font_resize('container', 'ts_up ts_up2', 'ts_up2', this);"><img src="https://shareforyou.co.kr/img/ts03.png" width="20" alt="더크게"></button>
+            </div>
+        </div>
+
+        <script>
+		
+        $(function () {
+            //폰트 크기 조정 위치 지정
+            var font_resize_class = get_cookie("ck_font_resize_add_class");
+            if( font_resize_class == 'ts_up' ){
+                $("#text_size button").removeClass("select");
+                $("#size_def").addClass("select");
+            } else if (font_resize_class == 'ts_up2') {
+                $("#text_size button").removeClass("select");
+                $("#size_up").addClass("select");
+            }
+
+            $(".hd_opener").on("click", function() {
+                var $this = $(this);
+                var $hd_layer = $this.next(".hd_div");
+
+                if($hd_layer.is(":visible")) {
+                    $hd_layer.hide();
+                    $this.find("span").text("열기");
+                } else {
+                    var $hd_layer2 = $(".hd_div:visible");
+                    $hd_layer2.prev(".hd_opener").find("span").text("열기");
+                    $hd_layer2.hide();
+
+                    $hd_layer.show();
+                    $this.find("span").text("닫기");
+                }
+            });
+
+            $("#container").on("click", function() {
+                $(".hd_div").hide();
+
+            });
+
+            $(".btn_gnb_op").click(function(){
+                $(this).toggleClass("btn_gnb_cl").next(".gnb_2dul").slideToggle(300);
+                
+            });
+
+            $(".hd_closer").on("click", function() {
+                var idx = $(".hd_closer").index($(this));
+                $(".hd_div:visible").hide();
+                $(".hd_opener:eq("+idx+")").find("span").text("열기");
+            });
+        });
+		
+        </script>
+        
+    </div>
+</header>
+
+
+
+<div id="wrapper">
+
+    <div id="container">
+    <!-- skin : theme/gallery --><script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4dca078e520da03a5a5a915dc8992e0f&libraries=services"></script>
+<script src="https://shareforyou.co.kr/js/jquery.modal.js"></script>
+<link rel="stylesheet" href="https://shareforyou.co.kr/js/css/jquery.modal.css">
+<section id="bo_w" class="share_b_wr">
+    <form name="fwrite" id="fwrite" action="https://shareforyou.co.kr/bbs/write_update.php" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off">
+    <input type="hidden" name="w" value="">
+	<input type="hidden" name="uid" value="2020072010461049"> 
+    <input type="hidden" name="bo_table" value="share">
+    <input type="hidden" name="wr_id" value="0">
+    <input type="hidden" name="sca" value="">
+    <input type="hidden" name="sfl" value="">
+    <input type="hidden" name="stx" value="">
+    <input type="hidden" name="spt" value="">
+    <input type="hidden" name="sst" value="">
+    <input type="hidden" name="sod" value="">
+    <input type="hidden" name="page" value="">
+        <div class="form_01 write_div share_write">
+        <div class="title_wr">
+			<h1 class="title">쉐어 물품 등록</h1>
+			<div class="btn_top top write_div btn_write">
+					<a href="./board.php?bo_table=share" class="btn_cancel"><img src="https://shareforyou.co.kr/theme/basic/img/btn_left.svg" alt="취소"></a>
+					<!-- <label class="btn_chk_submit"><img src="https://shareforyou.co.kr/theme/basic/img/btn_check.svg" alt="작성완료">-->
+					<label for="btn_submit"><img src="https://shareforyou.co.kr/theme/basic/img/btn_check.png" id="btn_check" alt="작성완료"><input type="submit" value="작성완료" id="btn_submit" class="btn_submit" accesskey="s"></label>
+			  </div>
+		</div>
+		<!-- <h2 class="sound_only">쉐어 글쓰기</h2> -->
+
+		<!-- write_div_wr 시작-->
+		<div class="write_div_wr">
+                <div class="bo_w_select">
+            <label for="ca_name" class="sound_only">분류<strong>필수</strong></label>
+            <select id="ca_name" name="ca_name" required>
+                <option value="">카테고리를 선택하세요</option>
+                <option value="캠핑용품">캠핑용품</option>
+<option value="레저스포츠">레저스포츠</option>
+<option value="생활용품">생활용품</option>
+            </select>
+        </div>
+         
+        
+        
+        
+        
+        
+
+        
+        <div class="bo_w_tit write_div">
+            <label for="wr_subject" class="sound_only">상품명<strong>필수</strong></label>
+            <input type="text" name="wr_subject" value="" id="wr_subject" required class="frm_input full_input required" placeholder="상품명">
+        </div>
+		<div class="write_div">
+            <label for="wr_email" class="sound_only">이메일</label>
+            <input type="email" name="wr_email" value="maiorem00@naver.com" id="wr_email" class="frm_input full_input  email" maxlength="100" placeholder="이메일 (계약서발송용)">
+        </div>
+		<div class="write_div" style="display:none">
+            <label for="wr_express" class="sound_only">배송방법</label>
+            <input type="text" name="wr_express" value="" id="wr_express" class="frm_input full_input" maxlength="100" placeholder="택배 또는 직거래">
+        </div>
+		<div class="bo_w_tit write_div">
+            <label for="wr_price" class="sound_only">금액<strong>필수</strong></label>
+            <input type="text" name="wr_price" value="" id="wr_price" required class="frm_input required" placeholder="금액" onkeyup="inputNumberFormat(this)">
+
+			<p class="price_option" style="display:block">
+				<label class="wr_price_op"> ( 1일 기준 )</label>
+			</p>
+			
+        </div>
+		
+		<div class="bo_w_tit share_imgup" style="height:100%; text-align:right; border:1px solid #ccc; border-radius:5px; margin:12px 20px;">
+		
+			<!-- 이미지 업로드 -->
+			<span id="img_txt" style="float:left; color:#777; padding-left:5px">이미지 업로드</span>
+			
+			<div style="display:block; margin-left:5px; height:100%;">
+				<span class="file_add">
+										<input type="file" name="bf_file[]" id="bf_file_1" onchange="readURL(this,'0')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_1" id="bf_file_label_1" style=" 
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(0)" id="blah_del_0" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah0" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_2" onchange="readURL(this,'1')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_2" id="bf_file_label_2" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(1)" id="blah_del_1" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah1" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_3" onchange="readURL(this,'2')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_3" id="bf_file_label_3" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(2)" id="blah_del_2" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah2" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_4" onchange="readURL(this,'3')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_4" id="bf_file_label_4" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(3)" id="blah_del_3" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah3" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_5" onchange="readURL(this,'4')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_5" id="bf_file_label_5" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(4)" id="blah_del_4" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah4" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_6" onchange="readURL(this,'5')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_6" id="bf_file_label_6" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(5)" id="blah_del_5" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah5" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_7" onchange="readURL(this,'6')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_7" id="bf_file_label_7" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(6)" id="blah_del_6" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah6" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_8" onchange="readURL(this,'7')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_8" id="bf_file_label_8" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(7)" id="blah_del_7" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah7" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_9" onchange="readURL(this,'8')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_9" id="bf_file_label_9" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(8)" id="blah_del_8" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah8" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+									<input type="file" name="bf_file[]" id="bf_file_10" onchange="readURL(this,'9')" class="frm_file" style="display:none">
+					
+					<label for="bf_file_10" id="bf_file_label_10" style=" display:none;  
+					background-image:url('https://shareforyou.co.kr/theme/basic/img/camera.png'); background-size:100% 100%; padding:6px 6px; line-height:25px;">&nbsp&nbsp&nbsp&nbsp
+					</label>
+					
+				</span>
+				
+
+								<div style="position:relative">
+					<a onclick="resetInputFile(9)" id="blah_del_9" 
+					style="display:none; position:absolute; top:5px; right:5px; padding:5px; border:1px solid #c13d2f; color:#c13d2f; text-align:center; border-radius:5px; font-weight:bold;">
+						삭제 <span style="color:#c13d2f;">X</span>
+					</a>
+					<img id="blah9" style="width:100%; display:none; padding:5px"><!--이미지-->
+				</div>
+
+
+				
+				
+							</div>
+			<!-- 이미지 업로드 끝 -->
+
+			</div>
+			<div class="write_div write_div2" style="padding:20px 0 20px 0; border-top:1px solid #ddd;">
+            <label for="wr_content" class="sound_only">상세내용<strong>필수</strong></label>
+                        <span class="sound_only">웹에디터 시작</span>
+<textarea id="wr_content" name="wr_content" class="" maxlength="65536" style="width:100%;height:300px" placeholder="상세 내용"></textarea>
+<span class="sound_only">웹 에디터 끝</span>                    
+        <!-- 비밀글 -->
+		<input type="hidden" id="addr_input_type" value="">
+		<span class="wrtie_secret" style="display:none">
+			<input type="checkbox" id="secret" name="secret" value="secret"><label for="secret">비밀글로 등록하기</label>
+		</span>
+		<!--
+			<span style="margin-left:5px; float:right">
+			<input type="checkbox" id="secret" name="secret" value="secret" onclick="chk('https://shareforyou.co.kr/theme/basic/img')" style="display:none;">
+			<label for="secret" id="secret_img" style="background-image:url('https://shareforyou.co.kr/theme/basic/img/un-lock.svg'); background-size:100% 100%; padding:10px 7px; line-height:40px;">&nbsp&nbsp&nbsp&nbsp</label>
+		</span>
+		<!-- 비밀글끝 -->
+        </div>
+		
+        		</div>
+		<!-- write_div_wr 끝-->
+    </div>
+<!-- 주소검색 -->
+		<div id="addr_div" style="padding:0px 3% 0px 3%">
+			<input type="text" id="addr_txt" name="addr_txt" class="frm_input full_input" placeholder="예) 서울특별시 서초구 서초동 -> 서초동 검색" required onkeyup="addr_search(this.value)" onclick="save_addr()" 
+			value="" >
+			<div id="addr_select_div"></div> <!-- 검색 출력 -->
+		</div>
+		<div id="map" style="margin:10px 20px; height:382px; border:1px solid #ddd;"></div>
+		<!-- 주소검색끝-->
+			<script type="text/javascript"> 
+			function readURL(input,no) { 
+				if (input.files && input.files[0]) { 
+					var reader = new FileReader(); 
+					reader.onload = function (e) { 
+						$('#blah'+no).attr('src', e.target.result); 
+					} 
+					reader.readAsDataURL(input.files[0]); 
+					} 
+					$('#blah'+no).css("display","block");
+					no *= 1;
+					num = no+1;
+					num2 = no+2;
+					num3 = no-1;
+					$('#blah_del_'+no).css("display","inline");
+					//$('#blah_del_'+no).css("display","none");
+					$('#bf_file_label_'+num).css("display","none");
+					$('#bf_file_label_'+num2).css("display","inline");
+					$('#img_txt').css("display","none");
+				} 
+			function resetInputFile(no) {
+					no *= 1;
+					num = no+1;
+					num2 = no+2;
+					num3 = no-1;
+					$('#bf_file_'+num).val("");
+					$('#blah'+no).attr("src","");
+					$('#blah'+no).css("display","none");
+					$('#blah_del_'+no).css("display","none");
+					$('#bf_file_label_'+no).css("display","inline");
+					$('#bf_file_label_'+num).css("display","none"); 
+				}
+			</script>
+		
+		
+		<script>
+			var checkUnload = true;
+			$(window).on("beforeunload", function(){
+				if(checkUnload) return "이 페이지를 벗어나면 작성된 내용은 저장되지 않습니다.";
+			});
+			function addr_search(search){
+				$.ajax({
+					url: './addr_search.php',
+					type: 'POST',
+					data: {'search':search},
+					dataType: 'html',
+					success: function(data){
+						$('#addr_select_div').html(data);
+						$('#addr_div').css("height","85px");
+					}
+				});
+			}
+			function addr_txt(txt){
+				$('#addr_txt').value(txt);
+			}
+		</script>
+		<script>
+				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+					mapOption = {
+						center: new daum.maps.LatLng(, ), // 지도의 중심좌표
+						level: 3 // 지도의 확대 레벨
+					};  
+
+				// 지도를 생성합니다    
+				var map = new daum.maps.Map(mapContainer, mapOption); 
+				// 주소-좌표 변환 객체를 생성합니다
+				var geocoder = new daum.maps.services.Geocoder();
+
+				// 지도를 클릭한 위치에 표출할 마커입니다
+				var marker = new daum.maps.Marker({ 
+					map: map,
+					// 지도 중심좌표에 마커를 생성합니다 
+					position: map.getCenter(),
+
+				}); 
+				//var getMap = "";
+				
+
+				//좌표로 주소를 얻음
+				function save_addr(){
+					//var getMap = "";
+					if($('#addr_input_type').val() == ''){
+						if(confirmBox("현재의 위치로 입력 하시겠습니까?")){
+						
+						}else{
+							$('#addr_input_type').val("1");
+						}
+					}
+				}
+
+				function searchDetailAddrFromCoords(coords, callback) {
+					// 좌표로 법정동 상세 주소 정보를 요청합니다
+					geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+				}
+
+				function addr_txt_input(){
+				var coords = new daum.maps.LatLng(, );
+					searchDetailAddrFromCoords(coords, function(result, status) {
+						if (status === kakao.maps.services.Status.OK) {
+							var detailAddr = result[0].address.address_name;
+
+							$('#addr_txt').val(detailAddr);
+							document.getElementById('point_x').value = ;
+							document.getElementById('point_y').value = ; 
+							$('#addr_txt').css("display","none");
+						}   
+					});
+				}
+
+				function getLByAddress(address) {
+				// 주소로 좌표를 검색합니다
+				geocoder.addressSearch(address, function(result, status) {
+
+					// 정상적으로 검색이 완료됐으면 
+					 if (status === daum.maps.services.Status.OK) {
+
+						var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+
+						// 결과값으로 받은 위치를 마커로 표시합니다
+					   //  var marker = new daum.maps.Marker({
+					   //     map: map,
+						//    position: coords
+						//});
+
+						// 인포윈도우로 장소에 대한 설명을 표시합니다
+						//var infowindow = new daum.maps.InfoWindow({
+						//    content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+					   // });
+						//infowindow.open(map, marker);
+						marker.setPosition(coords);
+						// 지도에 마커를 표시합니다
+						marker.setMap(map);
+
+						// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+						map.setCenter(coords);
+						document.getElementById('point_x').value = coords.getLat();
+						document.getElementById('point_y').value = coords.getLng();  
+						
+						// 좌표로 상세 주소 정보를 요청합니다
+						
+						
+					} 
+				});  
+				}
+
+				// 지도에 클릭 이벤트를 등록합니다
+				// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+				daum.maps.event.addListener(map, 'click', function(mouseEvent) {        
+					// 지도에 마커를 표시합니다
+					marker.setMap(map);
+					
+					// 클릭한 위도, 경도 정보를 가져옵니다 
+					var latlng = mouseEvent.latLng; 
+					
+					// 마커 위치를 클릭한 위치로 옮깁니다
+					marker.setPosition(latlng);
+					
+					document.getElementById('point_x').value = latlng.getLat();
+					document.getElementById('point_y').value = latlng.getLng(); 
+					//alert(latlng.getLat()+" "+latlng.getLng());
+					
+				});
+				function confirmBox(txt, callbackMethod, jsonData){
+					modal({
+						type: 'confirm',
+						title: '',
+						text: txt,
+						callback: function(result) {
+							if(result == true){
+								//location.href=g5_bbs_url+"/write.php?bo_table=share&map=Y";
+								addr_txt_input();
+							}
+						}
+					});
+				}
+		</script>
+		<style>
+			.img_preview{width:100%}
+		</style>
+        
+
+	<input type="hidden" id="point_x" name="point_x">
+	<input type="hidden" id="point_y" name="point_y">
+
+
+	<div class="btn_top top write_div btn_write" style="display:none">
+        <a href="./board.php?bo_table=share" class="btn_cancel"><img src="https://shareforyou.co.kr/theme/basic/img/btn_left.png" alt="취소"></a>
+        <!-- <label class="btn_chk_submit"><img src="https://shareforyou.co.kr/theme/basic/img/btn_check.png" alt="작성완료">-->
+		<label for="btn_submit"><img src="https://shareforyou.co.kr/theme/basic/img/btn_check.png" alt="작성완료"><input type="submit" value="작성완료" id="btn_submit" class="btn_submit" accesskey="s" style="display:none"></label>
+    </div>
+
+    </form>
+</section>
+<script>
+function chk(link){
+	if($("input[name='secret']:checked").length == 1){
+		$("#secret_img").css("background-image","url('"+link+"/lock.svg')");
+	}else{
+		$("#secret_img").css("background-image","url('"+link+"/un-lock.svg')");
+	}
+}
+
+function inputNumberFormat(obj) { 
+	obj.value = comma(uncomma(obj.value)); 
+} 
+
+function comma(str) { 
+	str = String(str); 
+	return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'); 
+} 
+
+function uncomma(str) { 
+	str = String(str); 
+	return str.replace(/[^\d]+/g, ''); 
+}
+function addr_view(){
+	if($("input[name='addr']:checked").length == 1){
+		$("#addr_div").css("display","block");
+	}else{
+		$("#addr_div").css("display","none");
+	}
+}
+</script>
+
+<script>
+function html_auto_br(obj)
+{
+    if (obj.checked) {
+        result = confirm("자동 줄바꿈을 하시겠습니까?\n\n자동 줄바꿈은 게시물 내용중 줄바뀐 곳을<br>태그로 변환하는 기능입니다.");
+        if (result)
+            obj.value = "html2";
+        else
+            obj.value = "html1";
+    }
+    else
+        obj.value = "";
+}
+
+function fwrite_submit(f)
+{
+	alert("물품 등록중 입니다. 잠시만 기다려주세요.");
+    var wr_content_editor = document.getElementById('wr_content');
+if (!wr_content_editor.value) { alert("내용을 입력해 주십시오."); wr_content_editor.focus(); return false; }
+
+	//$("#btn_check").attr("src","https://shareforyou.co.kr/theme/basic/img/btn_check_on.png");
+    var subject = "";
+    var content = "";
+    $.ajax({
+        url: g5_bbs_url+"/ajax.filter.php",
+        type: "POST",
+        data: {
+            "subject": f.wr_subject.value,
+            "content": f.wr_content.value
+        },
+        dataType: "json",
+        async: false,
+        cache: false,
+        success: function(data, textStatus) {
+            subject = data.subject;
+            content = data.content;
+        }
+    });
+	checkUnload = false;
+    if (subject) {
+        alert("제목에 금지단어('"+subject+"')가 포함되어있습니다");
+        f.wr_subject.focus();
+        return false;
+    }
+
+    if (content) {
+        alert("내용에 금지단어('"+content+"')가 포함되어있습니다");
+        if (typeof(ed_wr_content) != "undefined")
+            ed_wr_content.returnFalse();
+        else
+            f.wr_content.focus();
+        return false;
+    }
+
+    if (document.getElementById("char_count")) {
+        if (char_min > 0 || char_max > 0) {
+            var cnt = parseInt(check_byte("wr_content", "char_count"));
+            if (char_min > 0 && char_min > cnt) {
+                alert("내용은 "+char_min+"글자 이상 쓰셔야 합니다.");
+                return false;
+            }
+            else if (char_max > 0 && char_max < cnt) {
+                alert("내용은 "+char_max+"글자 이하로 쓰셔야 합니다.");
+                return false;
+            }
+        }
+    }
+
+    
+    document.getElementById("btn_submit").disabled = "disabled";
+
+    return true;
+}
+
+</script>
+
+
+<!-- ie6,7에서 사이드뷰가 게시판 목록에서 아래 사이드뷰에 가려지는 현상 수정 -->
+<!--[if lte IE 7]>
+<script>
+$(function() {
+    var $sv_use = $(".sv_use");
+    var count = $sv_use.length;
+
+    $sv_use.each(function() {
+        $(this).css("z-index", count);
+        $(this).css("position", "relative");
+        count = count - 1;
+    });
+});
+</script>
+<![endif]-->
+
+</body>
+</html>
